@@ -15,17 +15,20 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
+         backgroundColor: Colors.white,
         appBar: AppBar(
           title: const Text('Welcome', style: TextStyle(color: Colors.white)),
           backgroundColor: Colors.blue,
         ),
         body: Center(
+
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 64.0),
-
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                Image.asset('assets/images/logo.png'),
+                const SizedBox(height: 24),
                 const Text("Please login to continue"),
                 const SizedBox(height: 24),
                 Column(
@@ -43,6 +46,15 @@ class MainApp extends StatelessWidget {
                         border: OutlineInputBorder(),
                       ),
                     ),
+                    const SizedBox(height: 8),
+
+                   CheckboxListTile(
+                    title: const Text('Remember me'),
+                    value: true,
+                    onChanged:(bool? value) { },
+                    controlAffinity: ListTileControlAffinity.leading,
+                    ),
+
                     const SizedBox(height: 16),
                     ElevatedButton(
                       onPressed: () => test(),
