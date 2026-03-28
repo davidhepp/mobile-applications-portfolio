@@ -8,64 +8,72 @@ class MainApp extends StatelessWidget {
   const MainApp({super.key});
 
   void test() {
-    print("test");
+    print("Login clicked!");
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-         backgroundColor: Colors.white,
+        backgroundColor: Colors.white,
         appBar: AppBar(
           title: const Text('Welcome', style: TextStyle(color: Colors.white)),
           backgroundColor: Colors.blue,
         ),
-        body: Center(
-
+        body: SafeArea(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 64.0),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset('assets/images/logo.png'),
                 const SizedBox(height: 24),
-                const Text("Please login to continue"),
+                Image.asset('assets/images/logo.png', height: 192),
                 const SizedBox(height: 24),
-                Column(
-                  children: [
-                    const TextField(
-                      decoration: InputDecoration(
-                        labelText: 'Username',
-                        border: OutlineInputBorder(),
+                Expanded(
+                  child: Column(
+                    children: [
+                      const Text(
+                        "Please login to continue",
+                        style: TextStyle(fontStyle: FontStyle.italic),
                       ),
-                    ),
-                    const SizedBox(height: 16),
-                    const TextField(
-                      decoration: InputDecoration(
-                        labelText: 'Password',
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
+                      const SizedBox(height: 24),
+                      Column(
+                        children: [
+                          const TextField(
+                            decoration: InputDecoration(
+                              labelText: 'Username',
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          const TextField(
+                            decoration: InputDecoration(
+                              labelText: 'Password',
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                          const SizedBox(height: 8),
 
-                   CheckboxListTile(
-                    title: const Text('Remember me'),
-                    value: true,
-                    onChanged:(bool? value) { },
-                    controlAffinity: ListTileControlAffinity.leading,
-                    ),
+                          CheckboxListTile(
+                            title: const Text('Remember me'),
+                            value: true,
+                            onChanged: (bool? value) {},
+                            controlAffinity: ListTileControlAffinity.leading,
+                          ),
 
-                    const SizedBox(height: 16),
-                    ElevatedButton(
-                      onPressed: () => test(),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue,
-                        foregroundColor: Colors.white,
-                        minimumSize: const Size(double.infinity, 48),
+                          const SizedBox(height: 16),
+                          ElevatedButton(
+                            onPressed: () => test(),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.blue,
+                              foregroundColor: Colors.white,
+                              minimumSize: const Size(double.infinity, 48),
+                            ),
+                            child: const Text("Login"),
+                          ),
+                        ],
                       ),
-                      child: const Text("Login"),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ],
             ),
