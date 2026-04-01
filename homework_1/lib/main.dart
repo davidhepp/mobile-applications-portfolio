@@ -41,24 +41,45 @@ class MainApp extends StatelessWidget {
                           const TextField(
                             decoration: InputDecoration(
                               labelText: 'Username',
+                              hintText: 'Enter Your Username',
+                              prefixIcon: Icon(Icons.person),
                               border: OutlineInputBorder(),
                             ),
                           ),
                           const SizedBox(height: 16),
                           const TextField(
+                            obscureText:  true,
                             decoration: InputDecoration(
                               labelText: 'Password',
+                              hintText: 'Enter Your Password',
+                              prefixIcon: Icon(Icons.lock),
                               border: OutlineInputBorder(),
                             ),
                           ),
                           const SizedBox(height: 8),
 
-                          CheckboxListTile(
-                            title: const Text('Remember me'),
-                            value: true,
-                            onChanged: (bool? value) {},
-                            controlAffinity: ListTileControlAffinity.leading,
+                          Row(children: [Checkbox
+                          (value: true,
+                          onChanged: (bool? value){},
                           ),
+                          const Text('Remember me'),
+                          const Spacer(),
+                          GestureDetector(
+                          onTap: () {
+                         debugPrint("Forgot Password clicked!");
+                          },
+                              child: const Text(
+                                'Forgot Password?',
+                               style: TextStyle(
+                                  color: Colors.blue,
+                               fontWeight: FontWeight.w500,
+        ),
+      ),
+    ),
+  ],
+),
+
+
 
                           const SizedBox(height: 16),
                           ElevatedButton(
