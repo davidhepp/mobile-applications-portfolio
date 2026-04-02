@@ -22,7 +22,7 @@ class MainApp extends StatelessWidget {
         ),
         body: SafeArea(
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 64.0),
+            padding: EdgeInsets.symmetric(horizontal: 32.0),
             child: Column(
               children: [
                 const SizedBox(height: 24),
@@ -48,7 +48,7 @@ class MainApp extends StatelessWidget {
                           ),
                           const SizedBox(height: 16),
                           const TextField(
-                            obscureText:  true,
+                            obscureText: true,
                             decoration: InputDecoration(
                               labelText: 'Password',
                               hintText: 'Enter Your Password',
@@ -58,28 +58,28 @@ class MainApp extends StatelessWidget {
                           ),
                           const SizedBox(height: 8),
 
-                          Row(children: [Checkbox
-                          (value: true,
-                          onChanged: (bool? value){},
+                          Row(
+                            children: [
+                              Checkbox(
+                                value: true,
+                                onChanged: (bool? value) {},
+                              ),
+                              const Text('Remember me'),
+                              const Spacer(),
+                              GestureDetector(
+                                onTap: () {
+                                  debugPrint("Forgot Password clicked!");
+                                },
+                                child: const Text(
+                                  'Forgot Password?',
+                                  style: TextStyle(
+                                    color: Colors.blue,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                          const Text('Remember me'),
-                          const Spacer(),
-                          GestureDetector(
-                          onTap: () {
-                         debugPrint("Forgot Password clicked!");
-                          },
-                              child: const Text(
-                                'Forgot Password?',
-                               style: TextStyle(
-                                  color: Colors.blue,
-                               fontWeight: FontWeight.w500,
-        ),
-      ),
-    ),
-  ],
-),
-
-
 
                           const SizedBox(height: 16),
                           ElevatedButton(
