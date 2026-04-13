@@ -62,11 +62,12 @@ final List<Member> teamMembers = [
     imagePath: 'assets/images/member5.png',
   ),
   Member(
-    name: 'Member Six',
+    name: 'Ayesha Siddiqua',
     role: 'Team Role',
-    intro: 'Short introduction here',
-    homeCountry: 'Country Name',
-    motto: 'Personal motto',
+    intro:
+        'Software Engineering student at Tampere University of Applied Sciences.',
+    homeCountry: 'Bangladesh',
+    motto: 'Keep learning, never give up',
     imagePath: 'assets/images/member6.png',
   ),
 ];
@@ -82,9 +83,86 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      title: 'Group 3 Team Profile App',
       home: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 1,
+          centerTitle: true,
+          title: const Text(
+            'Group 3 Team Profile App',
+            style: TextStyle(
+              color: Colors.black87,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          bottom: const PreferredSize(
+            preferredSize: Size.fromHeight(40),
+            child: Padding(
+              padding: EdgeInsets.only(bottom: 10),
+              child: Text(
+                'Welcome To The Team 3 Profile App',
+                style: TextStyle(
+                  color: Colors.black54,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+          ),
+        ),
+        drawer: Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              const DrawerHeader(
+                decoration: BoxDecoration(
+                  color: Color.fromARGB(255, 232, 208, 245),
+                ),
+                child: Align(
+                  alignment: Alignment.bottomLeft,
+                  child: Text(
+                    'Settings',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+              ExpansionTile(
+                leading: const Icon(Icons.language),
+                title: const Text('Language'),
+                children: [
+                  ListTile(
+                    title: const Text('English'),
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                  ListTile(
+                    title: const Text('Finnish'),
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                  ListTile(
+                    title: const Text('German'),
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
         body: SafeArea(
-          child: Center(child: TeamMemberCarousel(members: teamMembers)),
+          child: Center(
+            child: TeamMemberCarousel(members: teamMembers),
+          ),
         ),
       ),
     );
@@ -162,7 +240,10 @@ class _TeamMemberCarouselState extends State<TeamMemberCarousel> {
                   return Center(
                     child: Opacity(
                       opacity: opacity,
-                      child: Transform.scale(scale: scale, child: child),
+                      child: Transform.scale(
+                        scale: scale,
+                        child: child,
+                      ),
                     ),
                   );
                 },
@@ -184,7 +265,10 @@ class _TeamMemberCarouselState extends State<TeamMemberCarousel> {
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: Colors.white,
-                      border: Border.all(color: Colors.grey.shade400, width: 2),
+                      border: Border.all(
+                        color: Colors.grey.shade400,
+                        width: 2,
+                      ),
                       image: DecorationImage(
                         image: AssetImage(widget.members[realIndex].imagePath),
                         fit: BoxFit.cover,
