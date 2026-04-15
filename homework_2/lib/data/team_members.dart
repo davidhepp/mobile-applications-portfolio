@@ -19,11 +19,12 @@ const List<Member> teamMembers = [
     imagePath: 'assets/images/member2.png',
   ),
   Member(
-    name: 'Member Three',
-    role: 'Team Role',
-    intro: 'Short introduction here',
-    homeCountry: 'Country Name',
-    motto: 'Personal motto',
+    name: 'Hanna Potrykus',
+    role: 'Student',
+    intro:
+        'Software Engineering student at Tampere University of Applied Sciences.',
+    homeCountry: 'Germany',
+    motto: 'Just smile and wave, boys!',
     imagePath: 'assets/images/member3.png',
   ),
   Member(

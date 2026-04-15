@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../data/team_members.dart';
+import '../widgets/sidebar/language_tile.dart';
+import '../widgets/sidebar/settings_tile.dart';
 import '../widgets/team_member_carousel.dart';
 
 class TeamProfilePage extends StatelessWidget {
@@ -37,50 +39,139 @@ class TeamProfilePage extends StatelessWidget {
         ),
       ),
       drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(
-                color: Color.fromARGB(255, 232, 208, 245),
-              ),
-              child: Align(
-                alignment: Alignment.bottomLeft,
-                child: Text(
-                  'Settings',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
+        backgroundColor: const Color.fromARGB(
+          255,
+          247,
+          241,
+          255,
+        ), // Very light purple
+        elevation: 0,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.horizontal(right: Radius.circular(24)),
+        ),
+        width: 280,
+        child: SafeArea(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Header
+              Padding(
+                padding: const EdgeInsets.fromLTRB(28, 70, 28, 24),
+                child: Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Colors.deepPurple.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Icon(
+                        Icons.settings_outlined,
+                        color: Colors.deepPurple.shade300,
+                        size: 20,
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    const Text(
+                      'SETTINGS',
+                      style: TextStyle(
+                        color: Colors.black87,
+                        fontSize: 20,
+                        letterSpacing: 1.2,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ),
-            ExpansionTile(
-              leading: const Icon(Icons.language),
-              title: const Text('Language'),
-              children: [
-                ListTile(
-                  title: const Text('English'),
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
+
+              const SizedBox(height: 20),
+
+              // Settings List
+              Expanded(
+                child: ListView(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  physics: const BouncingScrollPhysics(),
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.only(left: 16, bottom: 8, top: 8),
+                      child: Text(
+                        'GENERAL',
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black38,
+                          letterSpacing: 1.2,
+                        ),
+                      ),
+                    ),
+                    const LanguageTile(),
+                    const SizedBox(height: 4),
+                    SettingsTile(
+                      title: 'Theme',
+                      icon: Icons.palette_outlined,
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+
+                    const SizedBox(height: 16),
+                    const Divider(
+                      color: Colors.black12,
+                      thickness: 1,
+                      indent: 16,
+                      endIndent: 16,
+                    ),
+                    const SizedBox(height: 16),
+
+                    const Padding(
+                      padding: EdgeInsets.only(left: 16, bottom: 8),
+                      child: Text(
+                        'ABOUT',
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black38,
+                          letterSpacing: 1.2,
+                        ),
+                      ),
+                    ),
+                    SettingsTile(
+                      title: 'About the Project',
+                      icon: Icons.info_outline,
+                      iconColor: Colors.orange,
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ],
                 ),
-                ListTile(
-                  title: const Text('Finnish'),
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
+              ),
+
+              // Footer
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 24, horizontal: 32),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Team Profile App',
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: Colors.black54,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    SizedBox(height: 4),
+                    Text(
+                      'Version 1.0.0',
+                      style: TextStyle(fontSize: 12, color: Colors.black38),
+                    ),
+                  ],
                 ),
-                ListTile(
-                  title: const Text('German'),
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                ),
-              ],
-            ),
-          ],
+              ),
+            ],
+          ),
         ),
       ),
       body: const SafeArea(
@@ -90,3 +181,5 @@ class TeamProfilePage extends StatelessWidget {
     );
   }
 }
+
+
