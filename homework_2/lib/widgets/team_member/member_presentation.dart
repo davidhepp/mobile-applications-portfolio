@@ -42,7 +42,7 @@ class MemberPresentation {
     'David': 'Germany',
     'Shayan Khurram': 'Pakistan',
     'Ayesha Siddiqua': 'Bangladesh',
-    'Reza Mesbah': 'Afganistan',
+    'Reza Mesbah': 'Afghanistan',
     
   };
 
