@@ -7,6 +7,7 @@ class MemberPresentation {
   // a 2-letter ISO code like FI). The flag in the details panel updates
   // automatically from that value.
   static const Map<String, String> _countryNameToIso = {
+    'afghanistan': 'AF',
     'bangladesh': 'BD',
     'germany': 'DE',
     'pakistan': 'PK',
@@ -41,6 +42,8 @@ class MemberPresentation {
     'David': 'Germany',
     'Shayan Khurram': 'Pakistan',
     'Ayesha Siddiqua': 'Bangladesh',
+    'Reza Mesbah': 'Afganistan',
+    
   };
 
   static String initials(String name) {
