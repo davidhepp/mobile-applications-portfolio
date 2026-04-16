@@ -37,11 +37,11 @@ const List<Member> teamMembers = [
     imagePath: 'assets/images/member4.png',
   ),
   Member(
-    name: 'Member Five',
-    role: 'Team Role',
-    intro: 'Short introduction here',
-    homeCountry: 'Country Name',
-    motto: 'Personal motto',
+    name: 'Lasanthi Ayesha',
+    role: 'Student',
+    intro: 'Software Engineering student at Tampere University of Applied Sciences',
+    homeCountry: 'SriLanka',
+    motto: 'Fail fast, learn faster',
     imagePath: 'assets/images/member5.png',
   ),
   Member(
