@@ -199,8 +199,7 @@ class TeamProfilePage extends StatelessWidget {
                     ),
                     SizedBox(height: 12),
                     Text(
-                      'We are Group 3, a team of students from THWS and TAMK working on this project together. '
-                      'Below you can get to know each of us a little better.',
+                      'We are Group 3, a team of students from THWS and TAMK working on this project together.',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 15,
@@ -208,7 +207,7 @@ class TeamProfilePage extends StatelessWidget {
                         height: 1.5,
                       ),
                     ),
-                    SizedBox(height: 24),
+                    SizedBox(height: 12),
 
                     // subtle divider instead of just space
                     Divider(

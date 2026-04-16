@@ -150,10 +150,24 @@ class _TeamMemberCarouselState extends State<TeamMemberCarousel>
                 currentMember,
               );
 
-              final double hintOpacity = (1 - (expansion * 1.8)).clamp(0.0, 1.0);
-              final double scrimOpacity = (rawExpansion * 0.16).clamp(0.0, 0.16);
-              final Color topBg = Color.lerp(Colors.white, backdropColors[0], expansion)!;
-              final Color bottomBg = Color.lerp(const Color(0xFFF6F6F8), backdropColors[1], expansion)!;
+              final double hintOpacity = (1 - (expansion * 1.8)).clamp(
+                0.0,
+                1.0,
+              );
+              final double scrimOpacity = (rawExpansion * 0.16).clamp(
+                0.0,
+                0.16,
+              );
+              final Color topBg = Color.lerp(
+                Colors.white,
+                backdropColors[0],
+                expansion,
+              )!;
+              final Color bottomBg = Color.lerp(
+                const Color(0xFFF6F6F8),
+                backdropColors[1],
+                expansion,
+              )!;
 
               return Stack(
                 children: [
@@ -180,18 +194,32 @@ class _TeamMemberCarouselState extends State<TeamMemberCarousel>
                         Expanded(
                           child: LayoutBuilder(
                             builder: (context, innerConstraints) {
-                              final double innerScreenHeight = innerConstraints.maxHeight;
-                              final double carouselHeight = _lerp(250, 210, profileMotion);
-                              final double carouselTop = _lerp(innerScreenHeight * 0.20, 16, profileMotion);
-                              final double nameTop = carouselTop + carouselHeight + _lerp(34, 18, profileMotion);
+                              final double innerScreenHeight =
+                                  innerConstraints.maxHeight;
+                              final double carouselHeight = _lerp(
+                                250,
+                                215,
+                                profileMotion,
+                              );
+                              final double carouselTop = _lerp(
+                                24,
+                                14,
+                                profileMotion,
+                              );
+                              final double nameTop =
+                                  carouselTop +
+                                  carouselHeight +
+                                  _lerp(34, 18, profileMotion);
 
                               final double basePanelTop = _lerp(
                                 innerScreenHeight + 32,
-                                innerScreenHeight * 0.34,
+                                innerScreenHeight * 0.20,
                                 panelMotion,
                               );
-                              final double panelTop = basePanelTop < (nameTop + 52)
-                                  ? (nameTop + 52)
+                              final double minPanelTop =
+                                  carouselTop + carouselHeight - 60;
+                              final double panelTop = basePanelTop < minPanelTop
+                                  ? minPanelTop
                                   : basePanelTop;
 
                               return Stack(
@@ -203,7 +231,10 @@ class _TeamMemberCarouselState extends State<TeamMemberCarousel>
                                     right: 0,
                                     child: IgnorePointer(
                                       ignoring: rawExpansion > 0.78,
-                                      child: SizedBox(height: carouselHeight, child: child!),
+                                      child: SizedBox(
+                                        height: carouselHeight,
+                                        child: child!,
+                                      ),
                                     ),
                                   ),
                                   Positioned(
@@ -211,7 +242,9 @@ class _TeamMemberCarouselState extends State<TeamMemberCarousel>
                                     left: 16,
                                     right: 16,
                                     child: Center(
-                                      child: MemberNameHeader(member: currentMember),
+                                      child: MemberNameHeader(
+                                        member: currentMember,
+                                      ),
                                     ),
                                   ),
                                   Positioned(
@@ -224,7 +257,9 @@ class _TeamMemberCarouselState extends State<TeamMemberCarousel>
                                       child: GestureDetector(
                                         onTap: _collapseDetails,
                                         child: Container(
-                                          color: Colors.black.withValues(alpha: scrimOpacity),
+                                          color: Colors.black.withValues(
+                                            alpha: scrimOpacity,
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -254,7 +289,9 @@ class _TeamMemberCarouselState extends State<TeamMemberCarousel>
                                       child: Opacity(
                                         opacity: hintOpacity,
                                         child: Center(
-                                          child: SwipeUpHint(onTap: _expandDetails),
+                                          child: SwipeUpHint(
+                                            onTap: _expandDetails,
+                                          ),
                                         ),
                                       ),
                                     ),
