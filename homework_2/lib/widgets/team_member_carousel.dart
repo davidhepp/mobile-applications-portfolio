@@ -10,8 +10,9 @@ import 'team_member/swipe_up_hint.dart';
 
 class TeamMemberCarousel extends StatefulWidget {
   final List<Member> members;
+  final Widget? topSection;
 
-  const TeamMemberCarousel({super.key, required this.members});
+  const TeamMemberCarousel({super.key, required this.members, this.topSection});
 
   @override
   State<TeamMemberCarousel> createState() => _TeamMemberCarouselState();
@@ -149,42 +150,10 @@ class _TeamMemberCarouselState extends State<TeamMemberCarousel>
                 currentMember,
               );
 
-              final double carouselHeight = _lerp(250, 210, profileMotion);
-              final double carouselTop = _lerp(
-                screenHeight * 0.20,
-                16,
-                profileMotion,
-              );
-              final double nameTop =
-                  carouselTop + carouselHeight + _lerp(34, 18, profileMotion);
-
-              final double basePanelTop = _lerp(
-                screenHeight + 32,
-                screenHeight * 0.34,
-                panelMotion,
-              );
-              final double panelTop = basePanelTop < (nameTop + 52)
-                  ? (nameTop + 52)
-                  : basePanelTop;
-
-              final double hintOpacity = (1 - (expansion * 1.8)).clamp(
-                0.0,
-                1.0,
-              );
-              final double scrimOpacity = (rawExpansion * 0.16).clamp(
-                0.0,
-                0.16,
-              );
-              final Color topBg = Color.lerp(
-                Colors.white,
-                backdropColors[0],
-                expansion,
-              )!;
-              final Color bottomBg = Color.lerp(
-                const Color(0xFFF6F6F8),
-                backdropColors[1],
-                expansion,
-              )!;
+              final double hintOpacity = (1 - (expansion * 1.8)).clamp(0.0, 1.0);
+              final double scrimOpacity = (rawExpansion * 0.16).clamp(0.0, 0.16);
+              final Color topBg = Color.lerp(Colors.white, backdropColors[0], expansion)!;
+              final Color bottomBg = Color.lerp(const Color(0xFFF6F6F8), backdropColors[1], expansion)!;
 
               return Stack(
                 children: [
@@ -199,62 +168,103 @@ class _TeamMemberCarouselState extends State<TeamMemberCarousel>
                       ),
                     ),
                   ),
-                  Positioned(
-                    top: carouselTop,
-                    left: 0,
-                    right: 0,
-                    child: IgnorePointer(
-                      ignoring: rawExpansion > 0.78,
-                      child: SizedBox(height: carouselHeight, child: child!),
-                    ),
-                  ),
-                  Positioned(
-                    top: nameTop,
-                    left: 16,
-                    right: 16,
-                    child: Center(
-                      child: MemberNameHeader(member: currentMember),
-                    ),
-                  ),
                   Positioned.fill(
-                    child: IgnorePointer(
-                      ignoring: rawExpansion < 0.05,
-                      child: GestureDetector(
-                        onTap: _collapseDetails,
-                        child: Container(
-                          color: Colors.black.withValues(alpha: scrimOpacity),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        if (widget.topSection != null)
+                          IgnorePointer(
+                            ignoring: rawExpansion > 0.05,
+                            child: widget.topSection!,
+                          ),
+                        Expanded(
+                          child: LayoutBuilder(
+                            builder: (context, innerConstraints) {
+                              final double innerScreenHeight = innerConstraints.maxHeight;
+                              final double carouselHeight = _lerp(250, 210, profileMotion);
+                              final double carouselTop = _lerp(innerScreenHeight * 0.20, 16, profileMotion);
+                              final double nameTop = carouselTop + carouselHeight + _lerp(34, 18, profileMotion);
+
+                              final double basePanelTop = _lerp(
+                                innerScreenHeight + 32,
+                                innerScreenHeight * 0.34,
+                                panelMotion,
+                              );
+                              final double panelTop = basePanelTop < (nameTop + 52)
+                                  ? (nameTop + 52)
+                                  : basePanelTop;
+
+                              return Stack(
+                                clipBehavior: Clip.none,
+                                children: [
+                                  Positioned(
+                                    top: carouselTop,
+                                    left: 0,
+                                    right: 0,
+                                    child: IgnorePointer(
+                                      ignoring: rawExpansion > 0.78,
+                                      child: SizedBox(height: carouselHeight, child: child!),
+                                    ),
+                                  ),
+                                  Positioned(
+                                    top: nameTop,
+                                    left: 16,
+                                    right: 16,
+                                    child: Center(
+                                      child: MemberNameHeader(member: currentMember),
+                                    ),
+                                  ),
+                                  Positioned(
+                                    top: -3000,
+                                    bottom: -3000,
+                                    left: -3000,
+                                    right: -3000,
+                                    child: IgnorePointer(
+                                      ignoring: rawExpansion < 0.05,
+                                      child: GestureDetector(
+                                        onTap: _collapseDetails,
+                                        child: Container(
+                                          color: Colors.black.withValues(alpha: scrimOpacity),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Positioned(
+                                    top: panelTop,
+                                    left: 16,
+                                    right: 16,
+                                    bottom: 0,
+                                    child: IgnorePointer(
+                                      ignoring: rawExpansion < 0.95,
+                                      child: Opacity(
+                                        opacity: expansion,
+                                        child: MemberDetailsCard(
+                                          member: currentMember,
+                                          onCollapse: _collapseDetails,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Positioned(
+                                    left: 16,
+                                    right: 16,
+                                    bottom: 20 + _hintOffset.value,
+                                    child: IgnorePointer(
+                                      ignoring: hintOpacity == 0,
+                                      child: Opacity(
+                                        opacity: hintOpacity,
+                                        child: Center(
+                                          child: SwipeUpHint(onTap: _expandDetails),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                          ),
                         ),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    top: panelTop,
-                    left: 16,
-                    right: 16,
-                    bottom: 0,
-                    child: IgnorePointer(
-                      ignoring: rawExpansion < 0.95,
-                      child: Opacity(
-                        opacity: expansion,
-                        child: MemberDetailsCard(
-                          member: currentMember,
-                          onCollapse: _collapseDetails,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 16,
-                    right: 16,
-                    bottom: 20 + _hintOffset.value,
-                    child: IgnorePointer(
-                      ignoring: hintOpacity == 0,
-                      child: Opacity(
-                        opacity: hintOpacity,
-                        child: Center(
-                          child: SwipeUpHint(onTap: _expandDetails),
-                        ),
-                      ),
+                      ],
                     ),
                   ),
                 ],

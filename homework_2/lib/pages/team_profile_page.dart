@@ -23,7 +23,7 @@ class TeamProfilePage extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-        bottom: const PreferredSize(
+        /*bottom: const PreferredSize(
           preferredSize: Size.fromHeight(40),
           child: Padding(
             padding: EdgeInsets.only(bottom: 10),
@@ -36,7 +36,7 @@ class TeamProfilePage extends StatelessWidget {
               ),
             ),
           ),
-        ),
+        ),*/
       ),
       drawer: Drawer(
         backgroundColor: const Color.fromARGB(
@@ -174,12 +174,67 @@ class TeamProfilePage extends StatelessWidget {
           ),
         ),
       ),
-      body: const SafeArea(
+      body: SafeArea(
         bottom: false,
-        child: TeamMemberCarousel(members: teamMembers),
+        child: TeamMemberCarousel(
+          members: teamMembers,
+          topSection: Column(
+            children: [
+              const SizedBox(height: 30),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.fromLTRB(35, 16, 24, 0),
+                child: const Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Welcome to our Team',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w600,
+                        color: Color(0xFF1E1E1E),
+                        letterSpacing: -0.5,
+                      ),
+                    ),
+                    SizedBox(height: 12),
+                    Text(
+                      'We are Group 3, a team of students from THWS and TAMK working on this project together. '
+                      'Below you can get to know each of us a little better.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: Color(0xFF6B6B6B),
+                        height: 1.5,
+                      ),
+                    ),
+                    SizedBox(height: 24),
+
+                    // subtle divider instead of just space
+                    Divider(
+                      thickness: 1,
+                      color: Color(0xFFE5E5E5),
+                      indent: 60,
+                      endIndent: 60,
+                    ),
+
+                    SizedBox(height: 16),
+                    Text(
+                      'Meet our Team:',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                        color: Color(0xFF333333),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
 }
-
-
