@@ -9,3 +9,5 @@ Refer to [STUDENTS.md](STUDENTS.md) for a list of contributors.
 ## Assignments
 
 - [homework_1/](homework_1/)
+- [homework_2/](homework_2/)
+
