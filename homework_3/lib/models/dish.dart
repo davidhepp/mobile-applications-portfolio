@@ -28,6 +28,7 @@ class Dish {
   final String shortDescription;
   final String longDescription;
   final DishCategory category;
+  final String imagePath;
 
   const Dish({
     required this.name,
@@ -35,5 +36,6 @@ class Dish {
     required this.shortDescription,
     required this.longDescription,
     required this.category,
+    required this.imagePath,
   });
 }
