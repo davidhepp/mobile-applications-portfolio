@@ -108,7 +108,7 @@ class LandingPage extends StatelessWidget {
                               child: _ContactInfo(
                                 icon: Icons.phone_outlined,
                                 fontSize: infoFontSize,
-                                lines: const ['+1 1234 567890', '(Available 18-16)'],
+                                lines: const ['+1 1234 567890', '(Available 8-16)'],
                               ),
                             ),
                             const SizedBox(width: 8),
