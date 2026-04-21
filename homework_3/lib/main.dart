@@ -1,20 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'splash_page.dart';
 
 void main() {
-  runApp(const MainApp());
+  runApp(const CoffeeShopApp());
 }
 
-class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+class CoffeeShopApp extends StatelessWidget {
+  const CoffeeShopApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text('Hello World!'),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Caffe Lento',
+      theme: ThemeData(
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFFC67C4E)),
+        scaffoldBackgroundColor: const Color(0xFFFCF8F3),
+        textTheme: GoogleFonts.soraTextTheme(),
+        appBarTheme: AppBarTheme(
+          titleTextStyle: GoogleFonts.sora(
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+            color: Colors.black,
+          ),
         ),
       ),
+      home: const SplashPage(),
     );
   }
 }
