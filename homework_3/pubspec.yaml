@@ -21,3 +21,16 @@ flutter:
   assets:
     - assets/images/logo.png
     - assets/images/hero.png
+    - assets/images/dishes/Cappuccino.png
+    - assets/images/dishes/Croissant.png
+    - assets/images/dishes/Espresso.png
+    - assets/images/dishes/lemontart.png
+    - assets/images/dishes/Latte.png
+    - assets/images/dishes/Mocha.png
+    - assets/images/dishes/IcedCoffee.png
+    - assets/images/dishes/BlueberryMuffin.png
+    - assets/images/dishes/AvocadoToast.png
+    - assets/images/dishes/TunaSandwich.png
+    - assets/images/dishes/ChickenSandwich.png
+
+
