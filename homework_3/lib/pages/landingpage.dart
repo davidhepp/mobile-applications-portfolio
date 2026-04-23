@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'menu_page.dart';
 
 class LandingPage extends StatelessWidget {
@@ -23,22 +24,27 @@ class LandingPage extends StatelessWidget {
                 .toDouble();
 
             final horizontalPadding = compact ? 16.0 : 20.0;
+            final contentWidth = constraints.maxWidth - horizontalPadding * 2;
             final topPadding = compact ? 14.0 : 24.0;
             final bodyFontSize = compact ? 11.0 : 12.0;
             final infoFontSize = compact ? 10.0 : 11.0;
             final buttonHeight = compact ? 50.0 : 56.0;
             final buttonFontSize = compact ? 16.0 : 18.0;
-            final sectionGapSmall = compact ? 16.0 : 22.0;
-            final sectionGapMedium = compact ? 22.0 : 34.0;
+            final introSeparatorGap = compact ? 26.0 : 32.0;
+            final contactIconSize = compact ? 26.0 : 30.0;
+            final contactColumnGap = compact ? 14.0 : 18.0;
+            final contactColumnWidth = ((contentWidth - contactColumnGap) / 2)
+                .clamp(0.0, 162.0);
+            final contactRowGap = compact ? 12.0 : 16.0;
 
             return Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 SizedBox(
-                  height: logoSectionHeight, // Holds the physical space steady
+                  height: logoSectionHeight,
                   child: Center(
                     child: Transform.scale(
-                      scale: 2.0, // <--- Visually scales the logo up by 70%
+                      scale: 2.0,
                       child: ClipRect(
                         child: Align(
                           alignment: const Alignment(0, 0.05),
@@ -72,8 +78,71 @@ class LandingPage extends StatelessWidget {
                     ),
                     child: Column(
                       children: [
+                        Center(
+                          child: SizedBox(
+                            width: contactColumnWidth * 2 + contactColumnGap,
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  width: contactColumnWidth,
+                                  child: Column(
+                                    children: [
+                                      _ContactInfo(
+                                        icon: Icons.location_on_outlined,
+                                        fontSize: infoFontSize,
+                                        iconSize: contactIconSize,
+                                        lines: const [
+                                          'Restaurant Street 1,',
+                                          '11111 City',
+                                          'Country',
+                                        ],
+                                      ),
+                                      SizedBox(height: contactRowGap),
+                                      _ContactInfo(
+                                        icon: Icons.mail_outline,
+                                        fontSize: infoFontSize,
+                                        iconSize: contactIconSize,
+                                        lines: const ['info@rest.com'],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(width: contactColumnGap),
+                                SizedBox(
+                                  width: contactColumnWidth,
+                                  child: Column(
+                                    children: [
+                                      _ContactInfo(
+                                        icon: Icons.access_time,
+                                        fontSize: infoFontSize,
+                                        iconSize: contactIconSize,
+                                        lines: const [
+                                          'Tu-Th 11-20',
+                                          'Fr-Su 11-23',
+                                          'Mondays closed',
+                                        ],
+                                      ),
+                                      SizedBox(height: contactRowGap),
+                                      _ContactInfo(
+                                        icon: Icons.phone_outlined,
+                                        fontSize: infoFontSize,
+                                        iconSize: contactIconSize,
+                                        lines: const [
+                                          '+1 1234 567890',
+                                          '(Available 8-16)',
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: compact ? 36 : 48),
                         Container(width: 259, height: 1, color: Colors.black),
-                        SizedBox(height: sectionGapSmall),
+                        SizedBox(height: introSeparatorGap),
                         SizedBox(
                           width: 260,
                           child: Text(
@@ -88,60 +157,8 @@ class LandingPage extends StatelessWidget {
                             ),
                           ),
                         ),
-                        SizedBox(height: compact ? 12 : 16),
+                        SizedBox(height: introSeparatorGap),
                         Container(width: 150, height: 1, color: Colors.black),
-                        SizedBox(height: sectionGapMedium),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              flex: 112,
-                              child: _ContactInfo(
-                                icon: Icons.location_on_outlined,
-                                fontSize: infoFontSize,
-                                lines: const [
-                                  'Restaurant Street 1,',
-                                  '11111 City',
-                                  'Country',
-                                ],
-                              ),
-                            ),
-                            const SizedBox(width: 8),
-                            Expanded(
-                              flex: 95,
-                              child: _ContactInfo(
-                                icon: Icons.phone_outlined,
-                                fontSize: infoFontSize,
-                                lines: const [
-                                  '+1 1234 567890',
-                                  '(Available 8-16)',
-                                ],
-                              ),
-                            ),
-                            const SizedBox(width: 8),
-                            Expanded(
-                              flex: 95,
-                              child: _ContactInfo(
-                                icon: Icons.access_time,
-                                fontSize: infoFontSize,
-                                lines: const [
-                                  'Tu-Th 11-20',
-                                  'Fr-Su 11-23',
-                                  'Mondays closed',
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: compact ? 14 : 20),
-                        SizedBox(
-                          width: 200,
-                          child: _ContactInfo(
-                            icon: Icons.mail_outline,
-                            fontSize: infoFontSize,
-                            lines: const ['info@rest.com'],
-                          ),
-                        ),
                         Expanded(
                           child: Center(
                             child: SizedBox(
@@ -190,33 +207,38 @@ class _ContactInfo extends StatelessWidget {
     required this.icon,
     required this.lines,
     required this.fontSize,
+    required this.iconSize,
   });
 
   final IconData icon;
   final List<String> lines;
   final double fontSize;
+  final double iconSize;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
-      child: Column(
-        children: [
-          Icon(icon, color: Colors.black, size: 24),
-          const SizedBox(height: 6),
-          Text(
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        SizedBox(
+          width: iconSize + 2,
+          child: Icon(icon, color: Colors.black, size: iconSize),
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: Text(
             lines.join('\n'),
-            textAlign: TextAlign.center,
+            textAlign: TextAlign.left,
             style: TextStyle(
               color: Colors.black,
               fontSize: fontSize,
               fontWeight: FontWeight.w600,
-              height: 1.5,
+              height: 1.4,
               letterSpacing: fontSize * 0.01,
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
