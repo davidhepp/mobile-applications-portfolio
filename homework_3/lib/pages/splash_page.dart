@@ -16,13 +16,25 @@ class _SplashPageState extends State<SplashPage> {
   }
 
   Future<void> _goToLanding() async {
-    await Future<void>.delayed(const Duration(milliseconds: 2340));   // Splash screen duration
+    await Future<void>.delayed(const Duration(milliseconds: 2340));
     if (!mounted) {
       return;
     }
     Navigator.of(context).pushReplacement(
-      _SmoothMaterialPageRoute<void>(
-        builder: (_) => const LandingPage(),
+      PageRouteBuilder<void>(
+        pageBuilder: (context, animation, secondaryAnimation) =>
+            const LandingPage(),
+        transitionDuration: const Duration(milliseconds: 720),
+        reverseTransitionDuration: const Duration(milliseconds: 450),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return FadeTransition(
+            opacity: CurvedAnimation(
+              parent: animation,
+              curve: Curves.easeInOut,
+            ),
+            child: child,
+          );
+        },
       ),
     );
   }
@@ -30,7 +42,7 @@ class _SplashPageState extends State<SplashPage> {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    final logoWidth = (width * 0.90).clamp(288.0, 456.0).toDouble();  //  Splash screen logo width with 90% of screen width, constrained between 288 and 456 pixels
+    final logoWidth = (width * 0.90).clamp(288.0, 456.0).toDouble();
 
     return Scaffold(
       body: SafeArea(
@@ -44,14 +56,4 @@ class _SplashPageState extends State<SplashPage> {
       ),
     );
   }
-}
-
-class _SmoothMaterialPageRoute<T> extends MaterialPageRoute<T> {
-  _SmoothMaterialPageRoute({required super.builder});
-
-  @override
-  Duration get transitionDuration => const Duration(milliseconds: 720);
-
-  @override
-  Duration get reverseTransitionDuration => const Duration(milliseconds: 450);
 }

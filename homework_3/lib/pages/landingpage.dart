@@ -12,11 +12,15 @@ class LandingPage extends StatelessWidget {
           builder: (context, constraints) {
             final maxHeight = constraints.maxHeight;
             final compact = maxHeight < 760;
-          final logoSectionHeight =
-            (maxHeight * 0.105).clamp(84.0, 106.0).toDouble();
-          final logoAssetWidth =
-            (constraints.maxWidth * 0.90).clamp(270.0, 360.0).toDouble();
-          final heroHeight = (maxHeight * 0.245).clamp(140.0, 225.0).toDouble();
+            final logoSectionHeight = (maxHeight * 0.105)
+                .clamp(84.0, 106.0)
+                .toDouble();
+            final logoAssetWidth = (constraints.maxWidth * 0.90)
+                .clamp(270.0, 360.0)
+                .toDouble();
+            final heroHeight = (maxHeight * 0.245)
+                .clamp(140.0, 225.0)
+                .toDouble();
 
             final horizontalPadding = compact ? 16.0 : 20.0;
             final topPadding = compact ? 14.0 : 24.0;
@@ -30,7 +34,7 @@ class LandingPage extends StatelessWidget {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-               SizedBox(
+                SizedBox(
                   height: logoSectionHeight, // Holds the physical space steady
                   child: Center(
                     child: Transform.scale(
@@ -59,7 +63,7 @@ class LandingPage extends StatelessWidget {
                 ),
                 Expanded(
                   child: Container(
-                    color: Colors.white,
+                    color: const Color(0xFFFCF8F3),
                     padding: EdgeInsets.fromLTRB(
                       horizontalPadding,
                       topPadding,
@@ -108,7 +112,10 @@ class LandingPage extends StatelessWidget {
                               child: _ContactInfo(
                                 icon: Icons.phone_outlined,
                                 fontSize: infoFontSize,
-                                lines: const ['+1 1234 567890', '(Available 8-16)'],
+                                lines: const [
+                                  '+1 1234 567890',
+                                  '(Available 8-16)',
+                                ],
                               ),
                             ),
                             const SizedBox(width: 8),
@@ -117,7 +124,11 @@ class LandingPage extends StatelessWidget {
                               child: _ContactInfo(
                                 icon: Icons.access_time,
                                 fontSize: infoFontSize,
-                                lines: const ['Tu-Th 11-20', 'Fr-Su 11-23', 'Mondays closed'],
+                                lines: const [
+                                  'Tu-Th 11-20',
+                                  'Fr-Su 11-23',
+                                  'Mondays closed',
+                                ],
                               ),
                             ),
                           ],

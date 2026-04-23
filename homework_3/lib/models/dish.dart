@@ -1,13 +1,6 @@
-enum DishCategory {
-  hotDrinks,
-  coldDrinks,
-  pastries,
-  savory,
-}
+enum DishCategory { hotDrinks, coldDrinks, pastries, sandwiches, breakfast }
 
 extension DishCategoryExtension on DishCategory {
-  // This extension allows you to easily get a UI-friendly name
-  // for your enum values by calling .displayName on them
   String get displayName {
     switch (this) {
       case DishCategory.hotDrinks:
@@ -16,8 +9,10 @@ extension DishCategoryExtension on DishCategory {
         return 'Cold Drinks';
       case DishCategory.pastries:
         return 'Pastries';
-      case DishCategory.savory:
-        return 'Savory';
+      case DishCategory.sandwiches:
+        return 'Sandwiches';
+      case DishCategory.breakfast:
+        return 'Breakfast';
     }
   }
 }

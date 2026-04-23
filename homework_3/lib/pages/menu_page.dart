@@ -1,199 +1,241 @@
 import 'package:flutter/material.dart';
 
-class MenuPage extends StatelessWidget {
+import '../data/dish_data.dart';
+import '../models/dish.dart';
+
+class MenuPage extends StatefulWidget {
   const MenuPage({super.key});
 
-  static const List<MenuItem> _items = [
-    MenuItem(
-      name: 'Espresso',
-      description: 'Rich and concentrated single-origin espresso.',
-      price: '\$4.00',
-      imagePath: 'assets/images/dishes/Espresso.png',
-      details:
-          'A bold espresso shot made from carefully roasted beans. Perfect for people who enjoy a strong and intense coffee flavor.',
-    ),
-    MenuItem(
-      name: 'Cappuccino',
-      description: 'Balanced espresso, steamed milk, and microfoam.',
-      price: '\$5.50',
-      imagePath: 'assets/images/dishes/Cappuccino.png',
-      details:
-          'A classic cappuccino with equal parts espresso, steamed milk, and foam. Smooth, balanced, and comforting.',
-    ),
-    MenuItem(
-      name: 'Latte',
-      description: 'Smooth espresso with steamed milk and light foam.',
-      price: '\$5.80',
-      imagePath: 'assets/images/dishes/Latte.png',
-      details:
-          'A creamy and mellow coffee made with espresso and steamed milk. Great for people who prefer a softer coffee taste.',
-    ),
-    MenuItem(
-      name: 'Mocha',
-      description: 'Espresso with chocolate and steamed milk.',
-      price: '\$6.20',
-      imagePath: 'assets/images/dishes/Mocha.png',
-      details:
-          'A rich and indulgent drink that combines espresso, chocolate, and milk. A great choice if you like sweet coffee drinks.',
-    ),
-    MenuItem(
-      name: 'Iced Coffee',
-      description: 'Chilled coffee served over ice.',
-      price: '\$5.00',
-      imagePath: 'assets/images/dishes/IcedCoffee.png',
-      details:
-          'A refreshing cold coffee drink served over ice. Ideal for warm days and for people who enjoy lighter chilled beverages.',
-    ),
-    MenuItem(
-      name: 'Butter Croissant',
-      description: 'Fresh-baked flaky pastry served warm.',
-      price: '\$4.20',
-      imagePath: 'assets/images/dishes/Croissant.png',
-      details:
-          'A buttery, flaky croissant baked fresh daily. Best enjoyed warm with coffee or tea.',
-    ),
-    MenuItem(
-      name: 'Chicken Sandwich',
-      description: 'Fresh sandwich with grilled chicken and crisp lettuce.',
-      price: '\$7.90',
-      imagePath: 'assets/images/dishes/ChickenSandwich.png',
-      details:
-          'A soul-warming classic featuring a tender chicken breast, double-dredged in our signature herb-flour blend and fried until perfectly crisp. Served on a toasted, buttery gluten-free bun with tangy house-made pickles, shredded iceberg lettuce, and a generous spread of our creamy roasted garlic aioli.',
-    ),
-    MenuItem(
-      name: 'Tuna Sandwich',
-      description: 'Classic tuna sandwich with creamy filling and fresh bread.',
-      price: '\$7.50',
-      imagePath: 'assets/images/dishes/TunaSandwich.png',
-      details:
-          'The perfect ratio of creamy and crunchy. Premium white albacore tuna tossed with a touch of grey poupon Dijon and burst cherry tomatoes for a bright, tangy finish. Served chilled with crisp romaine lettuce and vine-ripened tomatoes on thick-cut, soft toasted bread.',
-    ),
-    MenuItem(
-      name: 'Avocado Toast',
-      description: 'Toasted bread topped with fresh avocado and seasoning.',
-      price: '\$6.80',
-      imagePath: 'assets/images/dishes/AvocadoToast.png',
-      details:
-          'A vibrant and rustic breakfast feast. Our thick-cut, flame-charred sourdough serves as the base for a generous spread of creamy avocado mash. We top it with a savory sauté of sweet corn, tender peas, green beans, carrots, and onions, all finished with a crunchy "everything" spice blend and a sprig of fresh rosemary. Complex, colorful, and completely satisfying.',
-    ),
-    MenuItem(
-      name: 'Lemon Tart',
-      description: 'Tangy lemon cream with a crisp pastry shell.',
-      price: '\$6.00',
-      imagePath: 'assets/images/dishes/lemontart.png',
-      details:
-          'A minimalist masterpiece where the true star is our sharp, pure lemon curd, offering a bright, explosive citrus flavor. Sweet and tangy in every bite.',
-    ),
-    MenuItem(
-      name: 'Blueberry Muffin',
-      description: 'Soft muffin filled with sweet blueberries.',
-      price: '\$5.80',
-      imagePath: 'assets/images/dishes/BlueberryMuffin.png',
-      details:
-          'A moist and fluffy muffin packed with blueberries. Pairs perfectly with coffee or tea for breakfast or a snack.',
-    ),
-  ];
+  @override
+  State<MenuPage> createState() => _MenuPageState();
+}
+
+class _MenuPageState extends State<MenuPage> {
+  DishCategory? _selectedCategory;
+  String? _precacheSignature;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    final pixelRatio = MediaQuery.devicePixelRatioOf(context);
+    final screenWidth = MediaQuery.sizeOf(context).width;
+    final thumbnailWidth = (56 * pixelRatio).round();
+    final detailWidth = (screenWidth * pixelRatio).round();
+    final detailHeight = (240 * pixelRatio).round();
+    final precacheSignature = '$thumbnailWidth:$detailWidth:$detailHeight';
+
+    if (_precacheSignature == precacheSignature) {
+      return;
+    }
+
+    _precacheSignature = precacheSignature;
+
+    for (final dish in cafeMenu) {
+      precacheImage(
+        _DishImageCache.providerFor(
+          dish,
+          cacheWidth: thumbnailWidth,
+          cacheHeight: thumbnailWidth,
+        ),
+        context,
+      );
+      precacheImage(
+        _DishImageCache.providerFor(
+          dish,
+          cacheWidth: detailWidth,
+          cacheHeight: detailHeight,
+        ),
+        context,
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Our Menu'),
-      ),
-      body: ListView.separated(
-        padding: const EdgeInsets.all(16),
-        itemCount: _items.length,
-        separatorBuilder: (context, index) => const SizedBox(height: 10),
-        itemBuilder: (context, index) {
-          final item = _items[index];
-
-          return Card(
-            elevation: 2,
-            child: ListTile(
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 10,
+      appBar: AppBar(title: const Text('Our Menu')),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8),
+                    child: ChoiceChip(
+                      label: const Text('All'),
+                      selected: _selectedCategory == null,
+                      onSelected: (_) {
+                        setState(() {
+                          _selectedCategory = null;
+                        });
+                      },
+                    ),
+                  ),
+                  for (final category in DishCategory.values)
+                    Padding(
+                      padding: const EdgeInsets.only(right: 8),
+                      child: ChoiceChip(
+                        label: Text(category.displayName),
+                        selected: _selectedCategory == category,
+                        onSelected: (_) {
+                          setState(() {
+                            _selectedCategory = category;
+                          });
+                        },
+                      ),
+                    ),
+                ],
               ),
-              leading: ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: Image.asset(
-                  item.imagePath,
-                  width: 56,
-                  height: 56,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) {
-                    return Container(
-                      width: 56,
-                      height: 56,
-                      color: Colors.grey.shade300,
-                      alignment: Alignment.center,
-                      child: const Icon(Icons.image_not_supported),
+            ),
+          ),
+          Expanded(
+            child: IndexedStack(
+              index: _selectedCategory == null
+                  ? 0
+                  : DishCategory.values.indexOf(_selectedCategory!) + 1,
+              children: [
+                _DishListView(
+                  key: const PageStorageKey<String>('all-dishes'),
+                  dishes: _dishesForCategory(null),
+                  showCategoryHeaders: true,
+                ),
+                for (final category in DishCategory.values)
+                  _DishListView(
+                    key: PageStorageKey<String>('category-${category.name}'),
+                    dishes: _dishesForCategory(category),
+                  ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  List<Dish> _dishesForCategory(DishCategory? category) {
+    if (category != null) {
+      return cafeMenu
+          .where((dish) => dish.category == category)
+          .toList(growable: false);
+    }
+
+    return DishCategory.values
+        .expand(
+          (category) => cafeMenu.where((dish) => dish.category == category),
+        )
+        .toList(growable: false);
+  }
+}
+
+class _DishListView extends StatelessWidget {
+  const _DishListView({
+    super.key,
+    required this.dishes,
+    this.showCategoryHeaders = false,
+  });
+
+  final List<Dish> dishes;
+  final bool showCategoryHeaders;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+      itemCount: dishes.length,
+      itemBuilder: (context, index) {
+        final dish = dishes[index];
+        final showCategoryHeader =
+            showCategoryHeaders &&
+            (index == 0 || dishes[index - 1].category != dish.category);
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (showCategoryHeader)
+              Padding(
+                padding: EdgeInsets.only(top: index == 0 ? 0 : 14, bottom: 8),
+                child: Text(
+                  dish.category.displayName,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: Card(
+                elevation: 2,
+                child: ListTile(
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 10,
+                  ),
+                  leading: _DishImage(dish: dish, size: 56, borderRadius: 10),
+                  title: Text(
+                    dish.name,
+                    style: const TextStyle(fontWeight: FontWeight.w600),
+                  ),
+                  subtitle: Text(dish.shortDescription),
+                  trailing: Text(
+                    dish.priceLabel,
+                    style: const TextStyle(fontWeight: FontWeight.w700),
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => MenuDetailPage(dish: dish),
+                      ),
                     );
                   },
                 ),
               ),
-              title: Text(
-                item.name,
-                style: const TextStyle(
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              subtitle: Text(item.description),
-              trailing: Text(
-                item.price,
-                style: const TextStyle(
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => MenuDetailPage(item: item),
-                  ),
-                );
-              },
             ),
-          );
-        },
-      ),
+          ],
+        );
+      },
     );
   }
 }
 
 class MenuDetailPage extends StatelessWidget {
-  const MenuDetailPage({
-    super.key,
-    required this.item,
-  });
+  const MenuDetailPage({super.key, required this.dish});
 
-  final MenuItem item;
+  final Dish dish;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(item.name),
-      ),
+      appBar: AppBar(title: Text(dish.name)),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Image.asset(
-              item.imagePath,
+            Image(
+              image: _DishImageCache.providerFor(
+                dish,
+                cacheWidth:
+                    (MediaQuery.sizeOf(context).width *
+                            MediaQuery.devicePixelRatioOf(context))
+                        .round(),
+                cacheHeight: (240 * MediaQuery.devicePixelRatioOf(context))
+                    .round(),
+              ),
               width: double.infinity,
               height: 240,
               fit: BoxFit.cover,
+              gaplessPlayback: true,
               errorBuilder: (context, error, stackTrace) {
                 return Container(
                   width: double.infinity,
                   height: 240,
                   color: Colors.grey.shade300,
                   alignment: Alignment.center,
-                  child: const Icon(
-                    Icons.image_not_supported,
-                    size: 50,
-                  ),
+                  child: const Icon(Icons.image_not_supported, size: 50),
                 );
               },
             ),
@@ -203,35 +245,37 @@ class MenuDetailPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    item.name,
+                    dish.name,
                     style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    item.price,
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          color: Colors.brown,
-                          fontWeight: FontWeight.w600,
-                        ),
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    item.description,
-                    style: Theme.of(context).textTheme.bodyLarge,
-                  ),
-                  const SizedBox(height: 16),
-                  const Text(
-                    'Details',
-                    style: TextStyle(
-                      fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    item.details,
+                    dish.priceLabel,
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      color: Colors.brown,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Chip(
+                    label: Text(dish.category.displayName),
+                    visualDensity: VisualDensity.compact,
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    dish.shortDescription,
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                  const SizedBox(height: 16),
+                  const Text(
+                    'Details',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    dish.longDescription,
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ],
@@ -244,18 +288,66 @@ class MenuDetailPage extends StatelessWidget {
   }
 }
 
-class MenuItem {
-  const MenuItem({
-    required this.name,
-    required this.description,
-    required this.price,
-    required this.imagePath,
-    required this.details,
+extension _DishDisplay on Dish {
+  String get priceLabel => '\$${price.toStringAsFixed(2)}';
+}
+
+class _DishImageCache {
+  static final Map<String, ImageProvider> _providers = {};
+
+  static ImageProvider providerFor(
+    Dish dish, {
+    required int cacheWidth,
+    required int cacheHeight,
+  }) {
+    final key = '${dish.imagePath}:$cacheWidth:$cacheHeight';
+
+    return _providers.putIfAbsent(
+      key,
+      () => ResizeImage.resizeIfNeeded(
+        cacheWidth,
+        cacheHeight,
+        AssetImage(dish.imagePath),
+      ),
+    );
+  }
+}
+
+class _DishImage extends StatelessWidget {
+  const _DishImage({
+    required this.dish,
+    required this.size,
+    required this.borderRadius,
   });
 
-  final String name;
-  final String description;
-  final String price;
-  final String imagePath;
-  final String details;
+  final Dish dish;
+  final double size;
+  final double borderRadius;
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(borderRadius),
+      child: Image(
+        image: _DishImageCache.providerFor(
+          dish,
+          cacheWidth: (size * MediaQuery.devicePixelRatioOf(context)).round(),
+          cacheHeight: (size * MediaQuery.devicePixelRatioOf(context)).round(),
+        ),
+        width: size,
+        height: size,
+        fit: BoxFit.cover,
+        gaplessPlayback: true,
+        errorBuilder: (context, error, stackTrace) {
+          return Container(
+            width: size,
+            height: size,
+            color: Colors.grey.shade300,
+            alignment: Alignment.center,
+            child: const Icon(Icons.image_not_supported),
+          );
+        },
+      ),
+    );
+  }
 }
