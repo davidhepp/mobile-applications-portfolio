@@ -1,15 +1,65 @@
 class Movie {
+  final int? id;
   final String title;
-  final String director;
+  final String plot;
+  final String genre;
+  final String actors;
+  final String poster;
+  final double imdbRating;
 
-  Movie({required this.title, required this.director});
+  Movie({
+    this.id,
+    required this.title,
+    required this.plot,
+    required this.genre,
+    required this.actors,
+    required this.poster,
+    required this.imdbRating,
+  });
 
+  /// Creates a Movie from a JSON map (as loaded from movie_data.json / HTTP).
   factory Movie.fromJson(Map<String, dynamic> json) {
-    return Movie(title: json['Title'] as String, director: json['Director'] as String);
+    return Movie(
+      title: json['Title'] as String? ?? '',
+      plot: json['Plot'] as String? ?? '',
+      genre: json['Genre'] as String? ?? '',
+      actors: json['Actors'] as String? ?? '',
+      poster: json['Poster'] as String? ?? '',
+      imdbRating: double.tryParse(json['imdbRating']?.toString() ?? '') ?? 0.0,
+    );
   }
 
+  /// Serialises back to a JSON-compatible map (keys match movie_data.json).
   Map<String, dynamic> toJson() => {
         'Title': title,
-        'Director': director,
+        'Plot': plot,
+        'Genre': genre,
+        'Actors': actors,
+        'Poster': poster,
+        'imdbRating': imdbRating.toString(),
+      };
+
+  /// Creates a Movie from a SQLite row map.
+  factory Movie.fromMap(Map<String, dynamic> map) {
+    return Movie(
+      id: map['id'] as int?,
+      title: map['title'] as String? ?? '',
+      plot: map['plot'] as String? ?? '',
+      genre: map['genre'] as String? ?? '',
+      actors: map['actors'] as String? ?? '',
+      poster: map['poster'] as String? ?? '',
+      imdbRating: (map['imdbRating'] as num?)?.toDouble() ?? 0.0,
+    );
+  }
+
+  /// Converts to a SQLite row map (lowercase keys matching the DB schema).
+  Map<String, dynamic> toMap() => {
+        if (id != null) 'id': id,
+        'title': title,
+        'plot': plot,
+        'genre': genre,
+        'actors': actors,
+        'poster': poster,
+        'imdbRating': imdbRating,
       };
 }

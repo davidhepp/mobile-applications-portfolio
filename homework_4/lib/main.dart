@@ -21,7 +21,8 @@ class MyApp extends StatelessWidget {
       ),
       home: const MyHomePage(
         title: 'Movies',
-        movieUri: 'https://git.fiw.fhws.de/introduction-to-flutter-2025ss/unit-07-http-and-bloc/-/raw/329759b27023c59828215b51dd081b58c5c07d50/http_demo/movie_data.json',
+        movieUri:
+            'https://git.fiw.fhws.de/introduction-to-flutter-2025ss/unit-07-http-and-bloc/-/raw/329759b27023c59828215b51dd081b58c5c07d50/http_demo/movie_data.json',
       ),
     );
   }
@@ -59,8 +60,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
     if (response.statusCode == 200) {
       final movies = jsonDecode(response.body) as List;
-      returnValue = List.generate(movies.length,
-          (index) => Movie.fromJson(movies[index] as Map<String, dynamic>));
+      returnValue = List.generate(
+        movies.length,
+        (index) => Movie.fromJson(movies[index] as Map<String, dynamic>),
+      );
     }
     return returnValue;
   }
@@ -80,7 +83,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 final movie = _movies[index];
                 return ListTile(
                   title: Text(movie.title),
-                  subtitle: Text(movie.director),
+                  subtitle: Text(movie.genre), // was movie.director (no longer exists)
                 );
               },
             ),
