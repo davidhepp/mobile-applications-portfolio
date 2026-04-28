@@ -1,38 +1,35 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 
+import 'db/movie_database.dart';
 import 'movie.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key, MovieRepository? repository})
+    : repository = repository ?? SqliteMovieRepository.instance;
+
+  final MovieRepository repository;
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'HTTP Demo',
+      title: 'Movies',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const MyHomePage(
-        title: 'Movies',
-        movieUri:
-            'https://git.fiw.fhws.de/introduction-to-flutter-2025ss/unit-07-http-and-bloc/-/raw/329759b27023c59828215b51dd081b58c5c07d50/http_demo/movie_data.json',
-      ),
+      home: MyHomePage(title: 'Movies', repository: repository),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title, required this.movieUri});
+  const MyHomePage({super.key, required this.title, required this.repository});
 
   final String title;
-  final String movieUri;
+  final MovieRepository repository;
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -41,6 +38,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   List<Movie> _movies = [];
   bool _isLoading = false;
+  String? _errorMessage;
 
   @override
   void initState() {
@@ -50,43 +48,53 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _loadAndShow() async {
     setState(() => _isLoading = true);
-    _movies = await _loadMovies();
-    setState(() => _isLoading = false);
-  }
-
-  Future<List<Movie>> _loadMovies() async {
-    final response = await http.get(Uri.parse(widget.movieUri));
-    var returnValue = <Movie>[];
-
-    if (response.statusCode == 200) {
-      final movies = jsonDecode(response.body) as List;
-      returnValue = List.generate(
-        movies.length,
-        (index) => Movie.fromJson(movies[index] as Map<String, dynamic>),
-      );
+    try {
+      await widget.repository.initialize();
+      final movies = await widget.repository.getAllMovies();
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        _movies = movies;
+        _errorMessage = null;
+        _isLoading = false;
+      });
+    } catch (error) {
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        _movies = [];
+        _errorMessage = 'Failed to load movies: $error';
+        _isLoading = false;
+      });
     }
-    return returnValue;
   }
 
   @override
   Widget build(BuildContext context) {
+    final body = switch ((_isLoading, _errorMessage, _movies.isEmpty)) {
+      (true, _, _) => const Center(child: CircularProgressIndicator()),
+      (false, final String message?, _) => Center(child: Text(message)),
+      (false, null, true) => const Center(child: Text('No movies found.')),
+      _ => ListView.builder(
+        itemCount: _movies.length,
+        itemBuilder: (context, index) {
+          final movie = _movies[index];
+          return ListTile(
+            title: Text(movie.title),
+            subtitle: Text(movie.genre),
+          );
+        },
+      ),
+    };
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : ListView.builder(
-              itemCount: _movies.length,
-              itemBuilder: (context, index) {
-                final movie = _movies[index];
-                return ListTile(
-                  title: Text(movie.title),
-                  subtitle: Text(movie.genre), // was movie.director (no longer exists)
-                );
-              },
-            ),
+      body: body,
     );
   }
 }
