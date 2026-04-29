@@ -1,14 +1,18 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+
 import 'db/movie_database.dart';
 import 'movie.dart';
+import 'movie_detail_screen.dart';
 
 void main() {
   if (Platform.isWindows) {
     sqfliteFfiInit();
     databaseFactory = databaseFactoryFfi;
   }
+
   runApp(const MyApp());
 }
 
@@ -19,6 +23,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Movies',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
@@ -28,7 +33,10 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+  const MyHomePage({
+    super.key,
+    required this.title,
+  });
 
   final String title;
 
@@ -40,6 +48,7 @@ class _MyHomePageState extends State<MyHomePage> {
   List<Movie> _movies = [];
   bool _isLoading = false;
   String? _errorMessage;
+
   final TextEditingController _searchController = TextEditingController();
   final MovieRepository _repository = SqliteMovieRepository.instance;
 
@@ -57,10 +66,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> _loadAllMovies() async {
     setState(() => _isLoading = true);
+
     try {
       await _repository.initialize();
       final movies = await _repository.getAllMovies();
+
       if (!mounted) return;
+
       setState(() {
         _movies = movies;
         _errorMessage = null;
@@ -68,6 +80,7 @@ class _MyHomePageState extends State<MyHomePage> {
       });
     } catch (error) {
       if (!mounted) return;
+
       setState(() {
         _movies = [];
         _errorMessage = 'Failed to load movies: $error';
@@ -83,9 +96,12 @@ class _MyHomePageState extends State<MyHomePage> {
     }
 
     setState(() => _isLoading = true);
+
     try {
       final results = await _repository.searchMoviesByTitle(query);
+
       if (!mounted) return;
+
       setState(() {
         _movies = results;
         _errorMessage = null;
@@ -93,6 +109,7 @@ class _MyHomePageState extends State<MyHomePage> {
       });
     } catch (error) {
       if (!mounted) return;
+
       setState(() {
         _movies = [];
         _errorMessage = 'Search failed: $error';
@@ -104,13 +121,23 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     final body = switch ((_isLoading, _errorMessage, _movies.isEmpty)) {
-      (true, _, _) => const Center(child: CircularProgressIndicator()),
-      (false, final String message?, _) => Center(child: Text(message)),
-      (false, null, true) => const Center(child: Text('No movies found.')),
+      (true, _, _) => const Center(
+          child: CircularProgressIndicator(),
+        ),
+
+      (false, final String message?, _) => Center(
+          child: Text(message),
+        ),
+
+      (false, null, true) => const Center(
+          child: Text('No movies found.'),
+        ),
+
       _ => ListView.builder(
           itemCount: _movies.length,
           itemBuilder: (context, index) {
             final movie = _movies[index];
+
             return ListTile(
               leading: movie.poster.isNotEmpty
                   ? Image.network(
@@ -118,19 +145,38 @@ class _MyHomePageState extends State<MyHomePage> {
                       width: 50,
                       height: 70,
                       fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) =>
-                          const Icon(Icons.movie, size: 40),
+                      errorBuilder: (context, error, stackTrace) {
+                        return const Icon(Icons.movie, size: 40);
+                      },
                     )
                   : const Icon(Icons.movie, size: 40),
+
               title: Text(movie.title),
+
               subtitle: Text(movie.genre),
+
               trailing: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(Icons.star, size: 16, color: Colors.amber),
+                  const Icon(
+                    Icons.star,
+                    size: 16,
+                    color: Colors.amber,
+                  ),
                   Text(' ${movie.imdbRating}'),
+                  const SizedBox(width: 8),
+                  const Icon(Icons.chevron_right),
                 ],
               ),
+
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MovieDetailScreen(movie: movie),
+                  ),
+                );
+              },
             );
           },
         ),
