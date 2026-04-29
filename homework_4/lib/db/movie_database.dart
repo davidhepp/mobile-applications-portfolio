@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-
+import 'dart:io';
 import '../movie.dart';
 
 abstract class MovieRepository {
@@ -70,6 +70,10 @@ class SqliteMovieRepository implements MovieRepository {
   }
 
   Future<Database> _openDatabase() async {
+     if (Platform.isWindows) {
+      sqfliteFfiInit();
+      databaseFactory = databaseFactoryFfi;
+    }
     final databasePath = await getDatabasesPath();
     final path = join(databasePath, _databaseName);
 
