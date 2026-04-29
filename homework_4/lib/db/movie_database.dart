@@ -1,8 +1,9 @@
 import 'dart:convert';
-
+import 'dart:io' show Platform;
 import 'package:flutter/services.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 import '../movie.dart';
 
@@ -25,7 +26,15 @@ class SqliteMovieRepository implements MovieRepository {
 
   Database? _database;
 
+  Future<void> _initDatabaseFactory() async {
+    if (Platform.isWindows) {
+      sqfliteFfiInit();
+      databaseFactory = databaseFactoryFfi;
+    }
+  }
+
   Future<Database> get _db async {
+    await _initDatabaseFactory();
     _database ??= await _openDatabase();
     return _database!;
   }
