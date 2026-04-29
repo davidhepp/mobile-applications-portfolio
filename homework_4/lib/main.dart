@@ -1,9 +1,14 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
-
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'db/movie_database.dart';
 import 'movie.dart';
 
 void main() {
+  if (Platform.isWindows) {
+    sqfliteFfiInit();
+    databaseFactory = databaseFactoryFfi;
+  }
   runApp(const MyApp());
 }
 
