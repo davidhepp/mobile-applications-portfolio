@@ -3,7 +3,6 @@ import 'dart:io' show Platform;
 import 'package:flutter/services.dart';
 import 'package:path/path.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-import 'dart:io';
 import '../movie.dart';
 
 abstract class MovieRepository {
@@ -21,7 +20,7 @@ class SqliteMovieRepository implements MovieRepository {
   static const String _assetPath = 'lib/db/movie_data.json';
   static const String _databaseName = 'movies.db';
   static const String _tableName = 'movies';
-  static const int _databaseVersion = 2;
+  static const int _databaseVersion = 10;
 
   Database? _database;
 
@@ -93,11 +92,23 @@ class SqliteMovieRepository implements MovieRepository {
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         imdbId TEXT NOT NULL UNIQUE,
         title TEXT NOT NULL,
+        year TEXT NOT NULL,
+        rated TEXT NOT NULL,
+        released TEXT NOT NULL,
+        runtime TEXT NOT NULL,
         plot TEXT NOT NULL,
         genre TEXT NOT NULL,
+        director TEXT NOT NULL,
+        writer TEXT NOT NULL,
         actors TEXT NOT NULL,
+        language TEXT NOT NULL,
+        country TEXT NOT NULL,
+        awards TEXT NOT NULL,
+        metascore TEXT NOT NULL,
         poster TEXT NOT NULL,
-        imdbRating REAL NOT NULL
+        imdbRating REAL NOT NULL,
+        imdbVotes TEXT NOT NULL,
+        images TEXT NOT NULL
       )
     ''');
   }
